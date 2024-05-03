@@ -1071,7 +1071,11 @@ public class PlayerNotificationManager {
     Notification notification = builder.build();
     notificationManager.notify(notificationId, notification);
     if (!isNotificationStarted) {
+      if (Build.VERSION.SDK_INT >= 34) {
+            context.registerReceiver(notificationBroadcastReceiver, intentFilter, Context.RECEIVER_EXPORTED);
+        } else {
       context.registerReceiver(notificationBroadcastReceiver, intentFilter);
+}
       if (notificationListener != null) {
         notificationListener.onNotificationStarted(notificationId, notification);
       }
