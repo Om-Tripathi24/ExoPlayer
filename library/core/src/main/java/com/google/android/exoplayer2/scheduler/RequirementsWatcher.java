@@ -110,7 +110,11 @@ public final class RequirementsWatcher {
       filter.addAction(Intent.ACTION_DEVICE_STORAGE_OK);
     }
     receiver = new DeviceStatusChangeReceiver();
-    context.registerReceiver(receiver, filter, null, handler);
+    if (Build.VERSION.SDK_INT >= 34) {
+            context.registerReceiver(receiver, filter,null,handler, Context.RECEIVER_EXPORTED);
+        } else {
+      context.registerReceiver(receiver, filter,null,handler);
+       }
     return notMetRequirements;
   }
 

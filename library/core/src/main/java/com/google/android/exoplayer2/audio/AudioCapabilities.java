@@ -56,10 +56,13 @@ public final class AudioCapabilities {
    */
   @SuppressWarnings("InlinedApi")
   public static AudioCapabilities getCapabilities(Context context) {
-    Intent intent =
-        context.registerReceiver(
-            /* receiver= */ null, new IntentFilter(AudioManager.ACTION_HDMI_AUDIO_PLUG));
-    return getCapabilities(context, intent);
+    Intent intent = null;
+     if (Build.VERSION.SDK_INT >= 34) {
+          intent =  context.registerReceiver(null, new IntentFilter(AudioManager.ACTION_HDMI_AUDIO_PLUG), Context.RECEIVER_EXPORTED);
+        } else {
+    intent=  context.registerReceiver(null, IntentFilter(AudioManager.ACTION_HDMI_AUDIO_PLUG));
+}
+return getCapabilities(context, intent);
   }
 
   @SuppressLint("InlinedApi")

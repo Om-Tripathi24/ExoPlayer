@@ -172,9 +172,13 @@ public final class Requirements implements Parcelable {
 
   private boolean isDeviceCharging(Context context) {
     @Nullable
-    Intent batteryStatus =
-        context.registerReceiver(
-            /* receiver= */ null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    Intent batteryStatus = null
+     if (Build.VERSION.SDK_INT >= 34) {
+          batteryStatus =  context.registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED), Context.RECEIVER_EXPORTED);
+        } else {
+    batteryStatus=  context.registerReceiver(receiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        }
+    
     if (batteryStatus == null) {
       return false;
     }
@@ -192,9 +196,11 @@ public final class Requirements implements Parcelable {
   }
 
   private boolean isStorageNotLow(Context context) {
-    return context.registerReceiver(
-            /* receiver= */ null, new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW))
-        == null;
+     if (Build.VERSION.SDK_INT >= 34) {
+          return =  context.registerReceiver(null,new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW), Context.RECEIVER_EXPORTED);
+        } else {
+    return context.registerReceiver(null, new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW));
+        }
   }
 
   private static boolean isInternetConnectivityValidated(ConnectivityManager connectivityManager) {

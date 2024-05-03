@@ -46,8 +46,13 @@ import android.os.Handler;
    */
   public void setEnabled(boolean enabled) {
     if (enabled && !receiverRegistered) {
-      context.registerReceiver(
-          receiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+      
+          if (Build.VERSION.SDK_INT >= 34) {
+            context.registerReceiver(receiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY), Context.RECEIVER_EXPORTED);
+        } else {
+      context.registerReceiver(receiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+}
+     
       receiverRegistered = true;
     } else if (!enabled && receiverRegistered) {
       context.unregisterReceiver(receiver);

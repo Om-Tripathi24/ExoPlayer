@@ -471,7 +471,11 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
         staticInstance = new ConnectivityActionReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        context.registerReceiver(staticInstance, filter);
+        if (Build.VERSION.SDK_INT >= 34) {
+            context.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+        } else {
+      context.registerReceiver(staticInstance, filter);
+       }
       }
       return staticInstance;
     }

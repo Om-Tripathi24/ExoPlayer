@@ -74,8 +74,12 @@ import com.google.android.exoplayer2.util.Util;
     VolumeChangeReceiver receiver = new VolumeChangeReceiver();
     IntentFilter filter = new IntentFilter(VOLUME_CHANGED_ACTION);
     try {
-      applicationContext.registerReceiver(receiver, filter);
-      this.receiver = receiver;
+         if (Build.VERSION.SDK_INT >= 34) {
+            context.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+        } else {
+      context.registerReceiver(receiver, filter);
+}
+this.receiver = receiver;
     } catch (RuntimeException e) {
       Log.w(TAG, "Error registering stream volume receiver", e);
     }
